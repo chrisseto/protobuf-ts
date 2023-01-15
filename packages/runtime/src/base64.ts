@@ -1,8 +1,8 @@
 // lookup table from base64 character to byte
-let encTable = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
+const encTable = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
 
 // lookup table from base64 character *code* to byte because lookup by number is fast
-let decTable: number[] = [];
+const decTable: number[] = [];
 for (let i = 0; i < encTable.length; i++)
     decTable[encTable[i].charCodeAt(0)] = i;
 

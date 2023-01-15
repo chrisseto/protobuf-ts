@@ -48,7 +48,7 @@ export function utf8read(bytes: Uint8Array): string {
         chunk = [],
         i = 0, // char offset
         t;     // temporary
-    let len = bytes.length;
+    const len = bytes.length;
     while (pos < len) {
         t = bytes[pos++];
         if (t < 128)

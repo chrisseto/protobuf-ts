@@ -103,7 +103,7 @@ abstract class SharedPbLong {
      * Convert to a native number.
      */
     toNumber(): number {
-        let result = this.hi * TWO_PWR_32_DBL + (this.lo >>> 0);
+        const result = this.hi * TWO_PWR_32_DBL + (this.lo >>> 0);
         if (!Number.isSafeInteger(result))
             throw new Error("cannot convert to safe number")
         return result;
@@ -175,7 +175,7 @@ export class PbULong extends SharedPbLong {
                     value = value.trim();
                     if (!RE_DECIMAL_STR.test(value))
                         throw new Error('string is no integer');
-                    let [minus, lo, hi] = int64fromString(value);
+                    const [minus, lo, hi] = int64fromString(value);
                     if (minus)
                         throw new Error('signed value');
                     return new PbULong(lo, hi);
@@ -265,8 +265,8 @@ export class PbLong extends SharedPbLong {
                     value = value.trim();
                     if (!RE_DECIMAL_STR.test(value))
                         throw new Error('string is no integer');
-                    let [minus, lo, hi] = int64fromString(value);
-                    let pbl = new PbLong(lo, hi);
+                    const [minus, lo, hi] = int64fromString(value);
+                    const pbl = new PbLong(lo, hi);
                     return minus ? pbl.negate() : pbl;
 
                 case "number":
@@ -308,7 +308,7 @@ export class PbLong extends SharedPbLong {
         if (BI)
             return this.toBigInt().toString();
         if (this.isNegative()) {
-            let n = this.negate();
+            const n = this.negate();
             return '-' + int64toString(n.lo, n.hi);
         }
         return int64toString(this.lo, this.hi);

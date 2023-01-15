@@ -84,7 +84,7 @@ export namespace UnknownFieldHandler {
      * This method is compatible with `BinaryReadOptions.readUnknownField`.
      */
     export const onRead: UnknownFieldReader = (typeName: string, message: any, fieldNo: number, wireType: WireType, data: Uint8Array) => {
-        let container = is(message) ? message[symbol] : message[symbol] = [];
+        const container = is(message) ? message[symbol] : message[symbol] = [];
         container.push({no: fieldNo, wireType, data});
     }
 
@@ -94,7 +94,7 @@ export namespace UnknownFieldHandler {
      * This method is compatible with `BinaryWriteOptions.writeUnknownFields`.
      */
     export const onWrite: UnknownFieldWriter = (typeName: string, message: any, writer: IBinaryWriter) => {
-        for (let {no, wireType, data} of UnknownFieldHandler.list(message))
+        for (const {no, wireType, data} of UnknownFieldHandler.list(message))
             writer.tag(no, wireType).raw(data);
     }
 
@@ -105,7 +105,7 @@ export namespace UnknownFieldHandler {
      */
     export const list = (message: any, fieldNo?: number): UnknownField[] => {
         if (is(message)) {
-            let all = message[symbol];
+            const all = message[symbol];
             return fieldNo ? all.filter(uf => uf.no == fieldNo) : all;
         }
         return [];

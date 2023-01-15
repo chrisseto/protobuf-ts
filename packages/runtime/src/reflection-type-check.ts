@@ -23,7 +23,7 @@ export class ReflectionTypeCheck {
         if (this.data)
             return;
         const req: string[] = [], known: string[] = [], oneofs: string[] = [];
-        for (let field of this.fields) {
+        for (const field of this.fields) {
             if (field.oneof) {
                 if (!oneofs.includes(field.oneof)) {
                     oneofs.push(field.oneof)
@@ -72,7 +72,7 @@ export class ReflectionTypeCheck {
      * The number of map entries / repeated values being checked
      * is < depth.
      */
-    is(message: any, depth: number, allowExcessProperties: boolean = false): boolean {
+    is(message: any, depth: number, allowExcessProperties = false): boolean {
         if (depth < 0)
             return true;
         if (message === null || message === undefined || typeof message != 'object')
@@ -80,7 +80,7 @@ export class ReflectionTypeCheck {
 
         this.prepare();
 
-        let
+        const
             keys = Object.keys(message),
             data = this.data!;
 
@@ -125,7 +125,7 @@ export class ReflectionTypeCheck {
     }
 
     private field(arg: any, field: FieldInfo, allowExcessProperties: boolean, depth: number): boolean {
-        let repeated = field.repeat;
+        const repeated = field.repeat;
         switch (field.kind) {
             case "scalar":
                 if (arg === undefined)
@@ -194,7 +194,7 @@ export class ReflectionTypeCheck {
     }
 
     private scalar(arg: any, type: ScalarType, longType?: LongType): boolean {
-        let argType = typeof arg;
+        const argType = typeof arg;
         switch (type) {
             case ScalarType.UINT64:
             case ScalarType.FIXED64:
@@ -242,7 +242,7 @@ export class ReflectionTypeCheck {
     }
 
     private mapKeys(map: object, type: Exclude<ScalarType, ScalarType.FLOAT | ScalarType.DOUBLE | ScalarType.BYTES>, depth: number): boolean {
-        let keys = Object.keys(map);
+        const keys = Object.keys(map);
         switch (type) {
             case ScalarType.INT32:
             case ScalarType.FIXED32:

@@ -73,7 +73,7 @@ export class BinaryWriter implements IBinaryWriter {
         let len = 0;
         for (let i = 0; i < this.chunks.length; i++)
             len += this.chunks[i].length;
-        let bytes = new Uint8Array(len);
+        const bytes = new Uint8Array(len);
         let offset = 0;
         for (let i = 0; i < this.chunks.length; i++) {
             bytes.set(this.chunks[i], offset)
@@ -105,10 +105,10 @@ export class BinaryWriter implements IBinaryWriter {
     join(): IBinaryWriter {
 
         // get chunk of fork
-        let chunk = this.finish();
+        const chunk = this.finish();
 
         // restore previous state
-        let prev = this.stack.pop();
+        const prev = this.stack.pop();
         if (!prev)
             throw new Error('invalid state, fork stack empty');
         this.chunks = prev.chunks;
@@ -190,7 +190,7 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `string` value, length-delimited data converted to UTF-8 text.
      */
     string(value: string): IBinaryWriter {
-        let chunk = this.textEncoder.encode(value);
+        const chunk = this.textEncoder.encode(value);
         this.uint32(chunk.byteLength); // write length of chunk as varint
         return this.raw(chunk);
     }
@@ -200,7 +200,7 @@ export class BinaryWriter implements IBinaryWriter {
      */
     float(value: number): IBinaryWriter {
         assertFloat32(value);
-        let chunk = new Uint8Array(4);
+        const chunk = new Uint8Array(4);
         new DataView(chunk.buffer).setFloat32(0, value, true);
         return this.raw(chunk);
     }
@@ -209,7 +209,7 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `double` value, a 64-bit floating point number.
      */
     double(value: number): IBinaryWriter {
-        let chunk = new Uint8Array(8);
+        const chunk = new Uint8Array(8);
         new DataView(chunk.buffer).setFloat64(0, value, true);
         return this.raw(chunk);
     }
@@ -219,7 +219,7 @@ export class BinaryWriter implements IBinaryWriter {
      */
     fixed32(value: number): IBinaryWriter {
         assertUInt32(value);
-        let chunk = new Uint8Array(4);
+        const chunk = new Uint8Array(4);
         new DataView(chunk.buffer).setUint32(0, value, true);
         return this.raw(chunk);
     }
@@ -229,7 +229,7 @@ export class BinaryWriter implements IBinaryWriter {
      */
     sfixed32(value: number): IBinaryWriter {
         assertInt32(value);
-        let chunk = new Uint8Array(4);
+        const chunk = new Uint8Array(4);
         new DataView(chunk.buffer).setInt32(0, value, true);
         return this.raw(chunk);
     }
@@ -249,9 +249,9 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `fixed64` value, a signed, fixed-length 64-bit integer.
      */
     sfixed64(value: string | number | bigint): IBinaryWriter {
-        let chunk = new Uint8Array(8);
-        let view = new DataView(chunk.buffer);
-        let long = PbLong.from(value);
+        const chunk = new Uint8Array(8);
+        const view = new DataView(chunk.buffer);
+        const long = PbLong.from(value);
         view.setInt32(0, long.lo, true);
         view.setInt32(4, long.hi, true);
         return this.raw(chunk);
@@ -261,9 +261,9 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `fixed64` value, an unsigned, fixed-length 64 bit integer.
      */
     fixed64(value: string | number | bigint): IBinaryWriter {
-        let chunk = new Uint8Array(8);
-        let view = new DataView(chunk.buffer);
-        let long = PbULong.from(value);
+        const chunk = new Uint8Array(8);
+        const view = new DataView(chunk.buffer);
+        const long = PbULong.from(value);
         view.setInt32(0, long.lo, true);
         view.setInt32(4, long.hi, true);
         return this.raw(chunk);
@@ -273,7 +273,7 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `int64` value, a signed 64-bit varint.
      */
     int64(value: string | number | bigint): IBinaryWriter {
-        let long = PbLong.from(value);
+        const long = PbLong.from(value);
         varint64write(long.lo, long.hi, this.buf);
         return this;
     }
@@ -282,7 +282,7 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `sint64` value, a signed, zig-zag-encoded 64-bit varint.
      */
     sint64(value: string | number | bigint): IBinaryWriter {
-        let long = PbLong.from(value),
+        const long = PbLong.from(value),
             // zigzag encode
             sign = long.hi >> 31,
             lo = (long.lo << 1) ^ sign,
@@ -295,7 +295,7 @@ export class BinaryWriter implements IBinaryWriter {
      * Write a `uint64` value, an unsigned 64-bit varint.
      */
     uint64(value: string | number | bigint): IBinaryWriter {
-        let long = PbULong.from(value);
+        const long = PbULong.from(value);
         varint64write(long.lo, long.hi, this.buf);
         return this;
     }

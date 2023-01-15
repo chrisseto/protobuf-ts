@@ -32,8 +32,8 @@ export function reflectionMergePartial<T extends object>(info: MessageInfo, targ
         input = source as Partial<UnknownMessage>,
         output: UnknownMessage | UnknownOneofGroup; // where we want our field value to go
 
-    for (let field of info.fields) {
-        let name = field.localName;
+    for (const field of info.fields) {
+        const name = field.localName;
 
         if (field.oneof) {
             const group = input[field.oneof] as UnknownOneofGroup | undefined; // this is the oneof`s group in the source
@@ -70,7 +70,7 @@ export function reflectionMergePartial<T extends object>(info: MessageInfo, targ
                 break;
 
             case "message":
-                let T = field.T();
+                const T = field.T();
                 if (field.repeat)
                     for (let i = 0; i < (fieldValue as any[]).length; i++)
                         (output[name] as any[])[i] = T.create((fieldValue as any[])[i]);
@@ -88,8 +88,8 @@ export function reflectionMergePartial<T extends object>(info: MessageInfo, targ
                         Object.assign(output[name], fieldValue); // elements are not reference types
                         break;
                     case "message":
-                        let T = field.V.T();
-                        for (let k of Object.keys(fieldValue as any))
+                        const T = field.V.T();
+                        for (const k of Object.keys(fieldValue as any))
                             (output[name] as any)[k] = T.create((fieldValue as any)[k]);
                         break;
                 }

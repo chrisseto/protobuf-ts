@@ -58,7 +58,7 @@ export class BinaryReader implements IBinaryReader {
      * Reads a tag - field number and wire type.
      */
     tag(): [number, WireType] {
-        let tag = this.uint32(),
+        const tag = this.uint32(),
             fieldNo = tag >>> 3,
             wireType = tag & 7;
         if (fieldNo <= 0 || wireType < 0 || wireType > 5)
@@ -72,7 +72,7 @@ export class BinaryReader implements IBinaryReader {
      * Supports WireType.StartGroup since v2.0.0-alpha.23.
      */
     skip(wireType: WireType): Uint8Array {
-        let start = this.pos;
+        const start = this.pos;
         // noinspection FallThroughInSwitchStatementJS
         switch (wireType) {
             case WireType.Varint:
@@ -86,7 +86,7 @@ export class BinaryReader implements IBinaryReader {
                 this.pos += 4;
                 break;
             case WireType.LengthDelimited:
-                let len = this.uint32();
+                const len = this.uint32();
                 this.pos += len;
                 break;
             case WireType.StartGroup:
@@ -135,7 +135,7 @@ export class BinaryReader implements IBinaryReader {
      * Read a `sint32` field, a signed, zigzag-encoded 32-bit varint.
      */
     sint32(): number {
-        let zze = this.uint32();
+        const zze = this.uint32();
         // decode zigzag
         return (zze >>> 1) ^ -(zze & 1);
     }
@@ -163,7 +163,7 @@ export class BinaryReader implements IBinaryReader {
     sint64(): PbLong {
         let [lo, hi] = this.varint64();
         // decode zig zag
-        let s = -(lo & 1);
+        const s = -(lo & 1);
         lo = ((lo >>> 1 | (hi & 1) << 31) ^ s);
         hi = (hi >>> 1 ^ s);
         return new PbLong(lo, hi);
@@ -174,7 +174,7 @@ export class BinaryReader implements IBinaryReader {
      * Read a `bool` field, a variant.
      */
     bool(): boolean {
-        let [lo, hi] = this.varint64();
+        const [lo, hi] = this.varint64();
         return lo !== 0 || hi !== 0;
     }
 
@@ -231,8 +231,8 @@ export class BinaryReader implements IBinaryReader {
      * Read a `bytes` field, length-delimited arbitrary data.
      */
     bytes(): Uint8Array {
-        let len = this.uint32();
-        let start = this.pos;
+        const len = this.uint32();
+        const start = this.pos;
         this.pos += len;
         this.assertBounds();
         return this.buf.subarray(start, start + len);

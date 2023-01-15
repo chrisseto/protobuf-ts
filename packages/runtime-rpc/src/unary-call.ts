@@ -101,7 +101,7 @@ export class UnaryCall<I extends object = object, O extends object = object> imp
 
 
     private async promiseFinished(): Promise<FinishedUnaryCall<I, O>> {
-        let [headers, response, status, trailers] =
+        const [headers, response, status, trailers] =
             await Promise.all([this.headers, this.response, this.status, this.trailers]);
         return {
             method: this.method,

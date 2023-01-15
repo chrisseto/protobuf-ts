@@ -101,7 +101,7 @@ export class ClientStreamingCall<I extends object = object, O extends object = o
 
 
     private async promiseFinished(): Promise<FinishedClientStreamingCall<I, O>> {
-        let [headers, response, status, trailers] =
+        const [headers, response, status, trailers] =
             await Promise.all([this.headers, this.response, this.status, this.trailers]);
         return {
             method: this.method,

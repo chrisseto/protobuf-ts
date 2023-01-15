@@ -4,7 +4,7 @@ import {ChannelCredentials} from "@grpc/grpc-js";
 describe('GrpcTransport', () => {
 
     it('can be created', function () {
-        let transport = new GrpcTransport({
+        const transport = new GrpcTransport({
             host: "fake",
             channelCredentials: ChannelCredentials.createInsecure()
         });

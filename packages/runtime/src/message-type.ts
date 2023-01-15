@@ -91,7 +91,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
 
 
     create(value?: PartialMessage<T>): T {
-        let message = reflectionCreate(this);
+        const message = reflectionCreate(this);
         if (value !== undefined) {
             reflectionMergePartial<T>(this, message, value);
         }
@@ -105,7 +105,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * Unknown fields are discarded.
      */
     clone(message: T): T {
-        let copy = this.create();
+        const copy = this.create();
         reflectionMergePartial<T>(this, copy, message);
         return copy;
     }
@@ -152,7 +152,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * Create a new message from binary format.
      */
     fromBinary(data: Uint8Array, options?: Partial<BinaryReadOptions>): T {
-        let opt = binaryReadOptions(options);
+        const opt = binaryReadOptions(options);
         return this.internalBinaryRead(opt.readerFactory(data), data.byteLength, opt);
     }
 
@@ -170,7 +170,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * This is equivalent to `T.fromJson(JSON.parse(json))`.
      */
     fromJsonString(json: string, options?: Partial<JsonReadOptions>): T {
-        let value = JSON.parse(json) as JsonValue;
+        const value = JSON.parse(json) as JsonValue;
         return this.fromJson(value, options);
     }
 
@@ -187,7 +187,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * This is equivalent to `JSON.stringify(T.toJson(t))`
      */
     toJsonString(message: T, options?: Partial<JsonWriteStringOptions>): string {
-        let value = this.toJson(message, options);
+        const value = this.toJson(message, options);
         return JSON.stringify(value, null, options?.prettySpaces ?? 0);
     }
 
@@ -196,7 +196,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * Write the message to binary format.
      */
     toBinary(message: T, options?: Partial<BinaryWriteOptions>): Uint8Array {
-        let opt = binaryWriteOptions(options);
+        const opt = binaryWriteOptions(options);
         return this.internalBinaryWrite(message, opt.writerFactory(), opt).finish();
     }
 
@@ -211,7 +211,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      */
     internalJsonRead(json: JsonValue, options: JsonReadOptions, target?: T): T {
         if (json !== null && typeof json == "object" && !Array.isArray(json)) {
-            let message = target ?? this.create();
+            const message = target ?? this.create();
             this.refJsonReader.read(json, message, options);
             return message;
         }
@@ -252,7 +252,7 @@ export class MessageType<T extends object> implements IMessageType<T> {
      * omitted, a new instance is created first.
      */
     internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: T): T {
-        let message = target ?? this.create();
+        const message = target ?? this.create();
         this.refBinReader.read(reader, message, options, length);
         return message as T;
     }

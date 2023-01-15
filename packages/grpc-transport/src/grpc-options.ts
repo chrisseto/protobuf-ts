@@ -1,5 +1,6 @@
-import {RpcOptions} from "@protobuf-ts/runtime-rpc";
-import {CallOptions, ChannelCredentials, ClientOptions,Metadata,MetadataOptions} from "@grpc/grpc-js";
+import type {RpcOptions} from "@protobuf-ts/runtime-rpc";
+import type {CallOptions, ChannelCredentials, ClientOptions,MetadataOptions} from "@grpc/grpc-js";
+import {Metadata} from "@grpc/grpc-js";
 
 export interface GrpcOptions extends RpcOptions {
 

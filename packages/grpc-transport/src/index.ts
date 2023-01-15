@@ -4,4 +4,4 @@
 
 
 export {GrpcTransport} from "./grpc-transport";
-export {GrpcOptions} from "./grpc-options";
+export type {GrpcOptions} from "./grpc-options";

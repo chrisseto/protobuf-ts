@@ -86,11 +86,11 @@ export interface RpcOptions {
 export function mergeRpcOptions<T extends RpcOptions>(defaults: T, options?: Partial<T>): T {
     if (!options)
         return defaults;
-    let o = {} as any;
+    const o = {} as any;
     copy(defaults, o);
     copy(options, o);
-    for (let key of Object.keys(options)) {
-        let val = options[key] as any;
+    for (const key of Object.keys(options)) {
+        const val = options[key] as any;
         switch (key) {
             case "jsonOptions":
                 o.jsonOptions = mergeJsonOptions(defaults.jsonOptions, o.jsonOptions);
@@ -115,8 +115,8 @@ export function mergeRpcOptions<T extends RpcOptions>(defaults: T, options?: Par
 function copy(a: object | undefined, into: object): void {
     if (!a)
         return;
-    let c = into as any;
-    for (let [k, v] of Object.entries(a)) {
+    const c = into as any;
+    for (const [k, v] of Object.entries(a)) {
         if (v instanceof Date)
             c[k] = new Date(v.getTime());
         else if (Array.isArray(v))

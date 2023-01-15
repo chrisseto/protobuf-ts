@@ -1,22 +1,24 @@
+import type {
+    MethodInfo,
+    RpcInputStream,
+    RpcMetadata,
+    RpcOptions,
+    RpcStatus,
+    RpcTransport} from "@protobuf-ts/runtime-rpc";
 import {
     ClientStreamingCall,
     Deferred,
     DeferredState,
     DuplexStreamingCall,
     mergeRpcOptions,
-    MethodInfo,
     RpcError,
-    RpcInputStream,
-    RpcMetadata,
-    RpcOptions,
     RpcOutputStreamController,
-    RpcStatus,
-    RpcTransport,
     ServerStreamingCall,
     UnaryCall
 } from "@protobuf-ts/runtime-rpc";
-import {GrpcCallOptions, GrpcOptions} from "./grpc-options";
-import {CallOptions, Client, ClientWritableStream, Metadata, status as GrpcStatus} from "@grpc/grpc-js";
+import type {GrpcCallOptions, GrpcOptions} from "./grpc-options";
+import type {CallOptions, ClientWritableStream} from "@grpc/grpc-js";
+import { Client, Metadata, status as GrpcStatus} from "@grpc/grpc-js";
 import {assert} from "@protobuf-ts/runtime";
 import {metadataFromGrpc, isServiceError, metadataToGrpc} from "./util";
 

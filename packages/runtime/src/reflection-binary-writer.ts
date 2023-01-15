@@ -1,7 +1,7 @@
 import type {BinaryWriteOptions, IBinaryWriter} from "./binary-format-contract";
 import {UnknownFieldHandler, WireType} from "./binary-format-contract";
-import type {FieldInfo} from "./reflection-info";
-import {PartialMessageInfo, RepeatType, ScalarType} from "./reflection-info";
+import type {FieldInfo,PartialMessageInfo} from "./reflection-info";
+import { RepeatType, ScalarType} from "./reflection-info";
 import type {IMessageType} from "./message-type-contract";
 import {assert} from "./assert";
 import {PbLong, PbULong} from "./pb-long";
@@ -59,7 +59,7 @@ export class ReflectionBinaryWriter {
             switch (field.kind) {
                 case "scalar":
                 case "enum":
-                    let T = field.kind == "enum" ? ScalarType.INT32 : field.T;
+                    const T = field.kind == "enum" ? ScalarType.INT32 : field.T;
                     if (repeated) {
                         assert(Array.isArray(value));
                         if (repeated == RepeatType.PACKED)
@@ -91,7 +91,7 @@ export class ReflectionBinaryWriter {
             }
         }
 
-        let u = options.writeUnknownFields;
+        const u = options.writeUnknownFields;
         if (u !== false)
             (u === true ? UnknownFieldHandler.onWrite : u)(this.info.typeName, message, writer);
     }
@@ -150,7 +150,7 @@ export class ReflectionBinaryWriter {
      * Write a single scalar value.
      */
     protected scalar(writer: IBinaryWriter, type: ScalarType, fieldNo: number, value: any, emitDefault: boolean): void {
-        let [wireType, method, isDefault] = this.scalarInfo(type, value);
+        const [wireType, method, isDefault] = this.scalarInfo(type, value);
         if (!isDefault || emitDefault) {
             writer.tag(fieldNo, wireType);
             (writer[method] as (val: any) => IBinaryWriter)(value);
@@ -174,7 +174,7 @@ export class ReflectionBinaryWriter {
         writer.fork();
 
         // write values without tags
-        let [, method,] = this.scalarInfo(type);
+        const [, method,] = this.scalarInfo(type);
         for (let i = 0; i < value.length; i++)
             (writer[method] as (val: any) => IBinaryWriter)(value[i]);
 
@@ -196,7 +196,7 @@ export class ReflectionBinaryWriter {
     protected scalarInfo(type: ScalarType, value?: any): [WireType, "int32" | "string" | "bool" | "uint32" | "double" | "float" | "int64" | "uint64" | "fixed64" | "bytes" | "fixed32" | "sfixed32" | "sfixed64" | "sint32" | "sint64", boolean] {
         let t = WireType.Varint;
         let m: "int32" | "string" | "bool" | "uint32" | "double" | "float" | "int64" | "uint64" | "fixed64" | "bytes" | "fixed32" | "sfixed32" | "sfixed64" | "sint32" | "sint64";
-        let i = value === undefined;
+        const i = value === undefined;
         let d = value === 0;
         switch (type) {
             case ScalarType.INT32:

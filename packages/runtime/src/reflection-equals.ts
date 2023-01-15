@@ -15,14 +15,14 @@ export function reflectionEquals(info: MessageInfo, a: UnknownMessage | undefine
         return true;
     if (!a || !b)
         return false;
-    for (let field of info.fields) {
-        let localName = field.localName;
-        let val_a = field.oneof ? (a[field.oneof] as UnknownOneofGroup)[localName] : a[localName];
-        let val_b = field.oneof ? (b[field.oneof] as UnknownOneofGroup)[localName] : b[localName];
+    for (const field of info.fields) {
+        const localName = field.localName;
+        const val_a = field.oneof ? (a[field.oneof] as UnknownOneofGroup)[localName] : a[localName];
+        const val_b = field.oneof ? (b[field.oneof] as UnknownOneofGroup)[localName] : b[localName];
         switch (field.kind) {
             case "enum":
             case "scalar":
-                let t = field.kind == "enum" ? ScalarType.INT32 : field.T;
+                const t = field.kind == "enum" ? ScalarType.INT32 : field.T;
                 if (!(field.repeat
                     ? repeatedPrimitiveEq(t, val_a as Array<UnknownScalar | UnknownEnum>, val_b as Array<UnknownScalar | UnknownEnum>)
                     : primitiveEq(t, val_a as UnknownScalar | UnknownEnum, val_b as UnknownScalar | UnknownEnum)))
@@ -38,7 +38,7 @@ export function reflectionEquals(info: MessageInfo, a: UnknownMessage | undefine
                     return false;
                 break;
             case "message":
-                let T = field.T();
+                const T = field.T();
                 if (!(field.repeat
                     ? repeatedMsgEq(T, val_a as Array<UnknownMessage>, val_b as Array<UnknownMessage>)
                     : T.equals(val_a, val_b)))
@@ -57,8 +57,8 @@ function primitiveEq(type: ScalarType, a: UnknownScalar, b: UnknownScalar): bool
         return true;
     if (type !== ScalarType.BYTES)
         return false;
-    let ba = a as Uint8Array;
-    let bb = b as Uint8Array;
+    const ba = a as Uint8Array;
+    const bb = b as Uint8Array;
     if (ba.length !== bb.length)
         return false;
     for (let i = 0; i < ba.length; i++)

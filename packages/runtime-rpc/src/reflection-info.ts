@@ -122,7 +122,7 @@ type PartialPartial<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
  * Turns PartialMethodInfo into MethodInfo.
  */
 export function normalizeMethodInfo<I extends object = any, O extends object = any>(method: PartialMethodInfo<I, O>, service: ServiceInfo): MethodInfo<I, O> {
-    let m = method as any;
+    const m = method as any;
     m.service = service;
     m.localName = m.localName ?? lowerCamelCase(m.name);
     // noinspection PointlessBooleanExpressionJS

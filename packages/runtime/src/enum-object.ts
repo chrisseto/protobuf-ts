@@ -15,11 +15,11 @@ export function isEnumObject(arg: any): arg is EnumInfo[1] {
     if (!arg.hasOwnProperty(0)) {
         return false;
     }
-    for (let k of Object.keys(arg)) {
-        let num = parseInt(k);
+    for (const k of Object.keys(arg)) {
+        const num = parseInt(k);
         if (!Number.isNaN(num)) {
             // is there a name for the number?
-            let nam = arg[num];
+            const nam = arg[num];
             if (nam === undefined)
                 return false;
             // does the name resolve back to the number?
@@ -27,7 +27,7 @@ export function isEnumObject(arg: any): arg is EnumInfo[1] {
                 return false;
         } else {
             // is there a number for the name?
-            let num = arg[k];
+            const num = arg[k];
             if (num === undefined)
                 return false;
             // is it a string enum?
@@ -54,8 +54,8 @@ export function isEnumObject(arg: any): arg is EnumInfo[1] {
 export function listEnumValues(enumObject: any): EnumObjectValue[] {
     if (!isEnumObject(enumObject))
         throw new Error("not a typescript enum object");
-    let values: Array<{ name: string, number: number }> = [];
-    for (let [name, number] of Object.entries(enumObject))
+    const values: Array<{ name: string, number: number }> = [];
+    for (const [name, number] of Object.entries(enumObject))
         if (typeof number == "number")
             values.push({name, number});
     return values;

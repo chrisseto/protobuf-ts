@@ -49,10 +49,10 @@ export class ReflectionBinaryReader {
             // read the tag and find the field
             const [fieldNo, wireType] = reader.tag(), field = this.fieldNoToField!.get(fieldNo);
             if (!field) {
-                let u = options.readUnknownField;
+                const u = options.readUnknownField;
                 if (u == "throw")
                     throw new Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.info.typeName}`);
-                let d = reader.skip(wireType);
+                const d = reader.skip(wireType);
                 if (u !== false)
                     (u === true ? UnknownFieldHandler.onRead : u)(this.info.typeName, message, fieldNo, wireType, d);
                 continue;
@@ -77,12 +77,12 @@ export class ReflectionBinaryReader {
             switch (field.kind) {
                 case "scalar":
                 case "enum":
-                    let T = field.kind == "enum" ? ScalarType.INT32 : field.T;
-                    let L = field.kind == "scalar" ? field.L : undefined;
+                    const T = field.kind == "enum" ? ScalarType.INT32 : field.T;
+                    const L = field.kind == "scalar" ? field.L : undefined;
                     if (repeated) {
-                        let arr = target[localName] as any[]; // safe to assume presence of array, oneof cannot contain repeated values
+                        const arr = target[localName] as any[]; // safe to assume presence of array, oneof cannot contain repeated values
                         if (wireType == WireType.LengthDelimited && T != ScalarType.STRING && T != ScalarType.BYTES) {
-                            let e = reader.uint32() + reader.pos;
+                            const e = reader.uint32() + reader.pos;
                             while (reader.pos < e)
                                 arr.push(this.scalar(reader, T, L));
                         } else
@@ -93,15 +93,15 @@ export class ReflectionBinaryReader {
 
                 case "message":
                     if (repeated) {
-                        let arr = target[localName] as any[]; // safe to assume presence of array, oneof cannot contain repeated values
-                        let msg = field.T().internalBinaryRead(reader, reader.uint32(), options);
+                        const arr = target[localName] as any[]; // safe to assume presence of array, oneof cannot contain repeated values
+                        const msg = field.T().internalBinaryRead(reader, reader.uint32(), options);
                         arr.push(msg);
                     } else
                         target[localName] = field.T().internalBinaryRead(reader, reader.uint32(), options, target[localName]);
                     break;
 
                 case "map":
-                    let [mapKey, mapVal] = this.mapEntry(field, reader, options);
+                    const [mapKey, mapVal] = this.mapEntry(field, reader, options);
                     // safe to assume presence of map object, oneof cannot contain repeated values
                     (target[localName] as UnknownMap)[mapKey] = mapVal;
                     break;
@@ -115,12 +115,12 @@ export class ReflectionBinaryReader {
      * Read a map field, expecting key field = 1, value field = 2
      */
     protected mapEntry(field: FieldInfo & { kind: "map" }, reader: IBinaryReader, options: BinaryReadOptions): [string | number, UnknownMap[string]] {
-        let length = reader.uint32();
-        let end = reader.pos + length;
+        const length = reader.uint32();
+        const end = reader.pos + length;
         let key: string | number | undefined = undefined; // javascript only allows number or string for object properties
         let val: any = undefined;
         while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
+            const [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case 1:
                     if (field.K == ScalarType.BOOL)
@@ -149,7 +149,7 @@ export class ReflectionBinaryReader {
             }
         }
         if (key === undefined) {
-            let keyRaw = reflectionScalarDefault(field.K);
+            const keyRaw = reflectionScalarDefault(field.K);
             key = field.K == ScalarType.BOOL ? keyRaw.toString() : keyRaw as string | number;
         }
         if (val === undefined)

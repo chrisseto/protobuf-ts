@@ -38,7 +38,7 @@ export class ServerCallContextController implements ServerCallContext {
     notifyCancelled(): void {
         if (!this._cancelled) {
             this._cancelled = true;
-            for (let l of this._listeners) {
+            for (const l of this._listeners) {
                 l();
             }
         }
@@ -96,7 +96,7 @@ export class ServerCallContextController implements ServerCallContext {
         const l = this._listeners;
         l.push(callback);
         return () => {
-            let i = l.indexOf(callback);
+            const i = l.indexOf(callback);
             if (i >= 0)
                 l.splice(i, 1);
         };

@@ -33,7 +33,7 @@ export class ReflectionJsonWriter {
         for (const field of this.fields) {
             // field is not part of a oneof, simply write as is
             if (!field.oneof) {
-                let jsonValue = this.field(field, source[field.localName], options);
+                const jsonValue = this.field(field, source[field.localName], options);
                 if (jsonValue !== undefined)
                     json[options.useProtoFieldName ? field.name : field.jsonName] = jsonValue;
                 continue;
@@ -45,7 +45,7 @@ export class ReflectionJsonWriter {
             const opt = field.kind == 'scalar' || field.kind == 'enum'
                 ? {...options, emitDefaultValues: true} // make sure to emit default values too
                 : options;
-            let jsonValue = this.field(field, group[field.localName], opt);
+            const jsonValue = this.field(field, group[field.localName], opt);
             assert(jsonValue !== undefined);
             json[options.useProtoFieldName ? field.name : field.jsonName] = jsonValue;
         }
@@ -265,7 +265,7 @@ export class ReflectionJsonWriter {
             case ScalarType.UINT64:
             case ScalarType.FIXED64:
                 assert(typeof value == 'number' || typeof value == 'string' || typeof value == 'bigint');
-                let ulong = PbULong.from(value);
+                const ulong = PbULong.from(value);
                 if (ulong.isZero() && !ed)
                     return undefined;
                 return ulong.toString();
@@ -275,7 +275,7 @@ export class ReflectionJsonWriter {
             case ScalarType.SFIXED64:
             case ScalarType.SINT64:
                 assert(typeof value == 'number' || typeof value == 'string' || typeof value == 'bigint');
-                let long = PbLong.from(value);
+                const long = PbLong.from(value);
                 if (long.isZero() && !ed)
                     return undefined;
                 return long.toString();

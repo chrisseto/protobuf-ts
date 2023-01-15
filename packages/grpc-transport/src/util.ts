@@ -1,7 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
-import {RpcMetadata} from "@protobuf-ts/runtime-rpc";
+import type {RpcMetadata} from "@protobuf-ts/runtime-rpc";
 import {listEnumValues} from "@protobuf-ts/runtime";
-import {MetadataOptions} from "@grpc/grpc-js";
+import type {MetadataOptions} from "@grpc/grpc-js";
 
 
 /**
@@ -27,7 +27,7 @@ export function isServiceError(arg: any): arg is grpc.ServiceError {
  * Parse a gRPC status code from a string.
  */
 export function rpcCodeToGrpc(from: string): grpc.status | undefined {
-    let v = listEnumValues(grpc.status).find(v => v.name === from);
+    const v = listEnumValues(grpc.status).find(v => v.name === from);
     return v ? v.number : undefined;
 }
 
@@ -40,12 +40,12 @@ export function metadataToGrpc(from: RpcMetadata, options?: MetadataOptions, ind
         options = { idempotentRequest: true, ...options };
     const to = new grpc.Metadata(options);
     const decode = (k: string, v: string) => k.endsWith('-bin') ? Buffer.from(v, 'base64') : v;
-    for (let k of Object.keys(from)) {
-        let v = from[k];
+    for (const k of Object.keys(from)) {
+        const v = from[k];
         if (typeof v == 'string') {
             to.add(k, decode(k, v));
         } else if (Array.isArray(v)) {
-            for (let vv of v) {
+            for (const vv of v) {
                 to.add(k, decode(k, vv));
             }
         }
@@ -60,8 +60,8 @@ export function metadataToGrpc(from: RpcMetadata, options?: MetadataOptions, ind
 export function metadataFromGrpc(from: grpc.Metadata): RpcMetadata {
     const to: RpcMetadata = {};
     const h2 = from.toHttp2Headers();
-    for (let k of Object.keys(h2)) {
-        let v = h2[k];
+    for (const k of Object.keys(h2)) {
+        const v = h2[k];
         if (v === undefined) {
             continue;
         }

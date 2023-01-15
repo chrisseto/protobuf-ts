@@ -102,7 +102,7 @@ export class DuplexStreamingCall<I extends object = object, O extends object = o
 
 
     private async promiseFinished(): Promise<FinishedDuplexStreamingCall<I, O>> {
-        let [headers, status, trailers] =
+        const [headers, status, trailers] =
             await Promise.all([this.headers, this.status, this.trailers]);
         return {
             method: this.method,

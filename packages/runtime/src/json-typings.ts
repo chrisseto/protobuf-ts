@@ -17,8 +17,7 @@ export type JsonObject = { [k: string]: JsonValue };
 
 
 // should be replaced by JsonValue = ... JsonValue[] but that throws off jasmine toEqual with TS2589
-interface JsonArray extends Array<JsonValue> {
-}
+type JsonArray = Array<JsonValue>
 
 
 /**
@@ -26,7 +25,7 @@ interface JsonArray extends Array<JsonValue> {
  * Distinguishes between array, null and object.
  */
 export function typeofJsonValue(value: JsonValue | undefined): 'string' | 'number' | 'object' | 'array' | 'null' | 'boolean' | 'undefined' {
-    let t = typeof value;
+    const t = typeof value;
     if (t == "object") {
         if (Array.isArray(value))
             return "array";

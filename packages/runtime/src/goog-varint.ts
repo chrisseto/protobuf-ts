@@ -48,7 +48,7 @@ export function varint64read(this: ReaderLike): [number, number] {
     let highBits = 0;
 
     for (let shift = 0; shift < 28; shift += 7) {
-        let b = this.buf[this.pos++];
+        const b = this.buf[this.pos++];
         lowBits |= (b & 0x7F) << shift;
         if ((b & 0x80) == 0) {
             this.assertBounds();
@@ -56,7 +56,7 @@ export function varint64read(this: ReaderLike): [number, number] {
         }
     }
 
-    let middleByte = this.buf[this.pos++];
+    const middleByte = this.buf[this.pos++];
 
     // last four bits of the first 32 bit number
     lowBits |= (middleByte & 0x0F) << 28;
@@ -70,7 +70,7 @@ export function varint64read(this: ReaderLike): [number, number] {
     }
 
     for (let shift = 3; shift <= 31; shift += 7) {
-        let b = this.buf[this.pos++];
+        const b = this.buf[this.pos++];
         highBits |= (b & 0x7F) << shift;
         if ((b & 0x80) == 0) {
             this.assertBounds();
@@ -139,7 +139,7 @@ const TWO_PWR_32_DBL = (1 << 16) * (1 << 16);
  */
 export function int64fromString(dec: string): [boolean, number, number] {
     // Check for minus sign.
-    let minus = dec[0] == '-';
+    const minus = dec[0] == '-';
     if (minus)
         dec = dec.slice(1);
     // Work 6 decimal digits at a time, acting like we're converting base 1e6
@@ -192,9 +192,9 @@ export function int64toString(bitsLow: number, bitsHigh: number): string {
 
     // Split 32:32 representation into 16:24:24 representation so our
     // intermediate digits don't overflow.
-    let low = bitsLow & 0xFFFFFF;
-    let mid = (((bitsLow >>> 24) | (bitsHigh << 8)) >>> 0) & 0xFFFFFF;
-    let high = (bitsHigh >> 16) & 0xFFFF;
+    const low = bitsLow & 0xFFFFFF;
+    const mid = (((bitsLow >>> 24) | (bitsHigh << 8)) >>> 0) & 0xFFFFFF;
+    const high = (bitsHigh >> 16) & 0xFFFF;
 
     // Assemble our three base-1e7 digits, ignoring carries. The maximum
     // value in a digit at this step is representable as a 48-bit integer, which
@@ -204,7 +204,7 @@ export function int64toString(bitsLow: number, bitsHigh: number): string {
     let digitC = (high * 2);
 
     // Apply carries from A to B and from B to C.
-    let base = 10000000;
+    const base = 10000000;
     if (digitA >= base) {
         digitB += Math.floor(digitA / base);
         digitA %= base;
@@ -217,7 +217,7 @@ export function int64toString(bitsLow: number, bitsHigh: number): string {
 
     // Convert base-1e7 digits to base-10, with optional leading zeroes.
     function decimalFrom1e7(digit1e7: number, needLeadingZeros: number) {
-        let partial = digit1e7 ? String(digit1e7) : '';
+        const partial = digit1e7 ? String(digit1e7) : '';
         if (needLeadingZeros) {
             return '0000000'.slice(partial.length) + partial;
         }

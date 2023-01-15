@@ -8,7 +8,7 @@ export function lowerCamelCase(snakeCase: string): string {
     let capNext = false;
     const sb = [];
     for (let i = 0; i < snakeCase.length; i++) {
-        let next = snakeCase.charAt(i);
+        const next = snakeCase.charAt(i);
         if (next == '_') {
             capNext = true;
         } else if (/\d/.test(next)) {

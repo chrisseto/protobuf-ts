@@ -5,7 +5,8 @@ import type {RpcTransport} from "./rpc-transport";
 import type {MethodInfo} from "./reflection-info";
 import {assert} from "@protobuf-ts/runtime";
 import {RpcOutputStreamController} from "./rpc-output-stream";
-import {mergeRpcOptions, RpcOptions} from "./rpc-options";
+import type { RpcOptions} from "./rpc-options";
+import {mergeRpcOptions} from "./rpc-options";
 import {UnaryCall} from "./unary-call";
 import {ServerStreamingCall} from "./server-streaming-call";
 import {ClientStreamingCall} from "./client-streaming-call";
@@ -167,7 +168,7 @@ export class TestTransport implements RpcTransport {
         if (this.data.response === undefined) {
             messages.push(method.O.create());
         } else if (Array.isArray(this.data.response)) {
-            for (let msg of this.data.response) {
+            for (const msg of this.data.response) {
                 assert(method.O.is(msg));
                 messages.push(msg);
             }
@@ -192,7 +193,7 @@ export class TestTransport implements RpcTransport {
         }
 
         // regular response messages were mocked. notify() them.
-        for (let msg of messages) {
+        for (const msg of messages) {
             stream.notifyMessage(msg);
 
             // add a short delay between responses
@@ -242,7 +243,7 @@ export class TestTransport implements RpcTransport {
 
     private maybeSuppressUncaught(...promise: Promise<any>[]): void {
         if (this.suppressUncaughtRejections) {
-            for (let p of promise) {
+            for (const p of promise) {
                 p.catch(() => {
                 });
             }

@@ -89,7 +89,7 @@ export class RpcOutputStreamController<T extends object = object> {
     private addLis<C>(callback: C, list: C[]): RemoveListenerFn {
         list.push(callback);
         return () => {
-            let i = list.indexOf(callback);
+            const i = list.indexOf(callback);
             if (i >= 0)
                 list.splice(i, 1);
         };
@@ -97,7 +97,7 @@ export class RpcOutputStreamController<T extends object = object> {
 
     // remove all listeners
     private clearLis(): void {
-        for (let l of Object.values(this._lis))
+        for (const l of Object.values(this._lis))
             l.splice(0, l.length);
     }
 
@@ -223,7 +223,7 @@ export class RpcOutputStreamController<T extends object = object> {
         // the async iterator
         return {
             next: () => {
-                let state = this._itState;
+                const state = this._itState;
                 assert(state, "bad state"); // if we don't have a state here, code is broken
 
                 // there should be no pending result.
@@ -232,7 +232,7 @@ export class RpcOutputStreamController<T extends object = object> {
 
                 // did we produce faster than the iterator consumed?
                 // return the oldest result from the queue.
-                let first = state.q.shift();
+                const first = state.q.shift();
                 if (first)
                     return ("value" in first) ? Promise.resolve(first) : Promise.reject(first);
 
@@ -248,7 +248,7 @@ export class RpcOutputStreamController<T extends object = object> {
     // "push" a new iterator result.
     // this either resolves a pending promise, or enqueues the result.
     private pushIt(result: IteratorResult<T, null> | Error): void {
-        let state = this._itState;
+        const state = this._itState;
         if (!state)
             return;
 

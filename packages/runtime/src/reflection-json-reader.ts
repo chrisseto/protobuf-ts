@@ -2,8 +2,8 @@ import type {JsonObject, JsonValue} from "./json-typings";
 import {isJsonObject, typeofJsonValue} from "./json-typings";
 import {base64decode} from "./base64";
 import type {JsonReadOptions} from "./json-format-contract";
-import type {EnumInfo, FieldInfo} from "./reflection-info";
-import {LongType, PartialMessageInfo, ScalarType} from "./reflection-info";
+import type {EnumInfo, FieldInfo, PartialMessageInfo} from "./reflection-info";
+import {LongType, ScalarType} from "./reflection-info";
 import {PbLong, PbULong} from "./pb-long";
 import {assert, assertFloat32, assertInt32, assertUInt32} from "./assert";
 import {reflectionLongConvert} from "./reflection-long-convert";
@@ -183,7 +183,7 @@ export class ReflectionJsonReader {
                         break;
 
                     case "enum":
-                        let val = this.enum(field.T(), jsonValue, field.name, options.ignoreUnknownFields);
+                        const val = this.enum(field.T(), jsonValue, field.name, options.ignoreUnknownFields);
                         if (val === false)
                             continue;
                         target[localName] = val;
@@ -219,7 +219,7 @@ export class ReflectionJsonReader {
                 if (type[2] && json.substring(0, type[2].length) === type[2])
                     // lookup without the shared prefix
                     localEnumName = json.substring(type[2].length);
-                let enumNumber = type[1][localEnumName];
+                const enumNumber = type[1][localEnumName];
                 if (typeof enumNumber === 'undefined' && ignoreUnknownFields) {
                     return false;
                 }
@@ -259,7 +259,7 @@ export class ReflectionJsonReader {
                     if (typeof json != "string" && typeof json != "number") {
                         break;
                     }
-                    let float = Number(json);
+                    const float = Number(json);
                     if (Number.isNaN(float)) {
                         e = "not a number";
                         break;

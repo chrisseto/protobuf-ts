@@ -60,11 +60,11 @@ export class RpcError extends Error {
         if (this.serviceName && this.methodName) {
             l.push('Method: ' + this.serviceName + '/' + this.methodName)
         }
-        let m = Object.entries(this.meta);
+        const m = Object.entries(this.meta);
         if (m.length) {
             l.push('');
             l.push('Meta:');
-            for (let [k, v] of m) {
+            for (const [k, v] of m) {
                 l.push(`  ${k}: ${v}`);
             }
         }
